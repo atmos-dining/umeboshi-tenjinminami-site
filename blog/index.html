@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ブログ・お知らせ｜食堂 うめぼし 天神南</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="食堂 うめぼし 天神南の最新情報・ブログ記事。おすすめメニューやお知らせをお届けします。">
+<link rel="icon" href="../images/tenjinminami_icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="canonical" href="https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+</head>
+
+<body data-page="blog">
+<div id="shared-header"></div>
+
+<main id="main">
+
+  <section class="section page-head">
+    <div class="section-inner">
+      <h1 class="page-title">ブログ・お知らせ</h1>
+      <p class="page-lead">食堂 うめぼし 天神南からの最新情報をお届けします。</p>
+    </div>
+  </section>
+
+  <section class="section blog" style="background:#fafafa; padding-top:0;">
+    <div class="section-inner">
+      <div id="blogList" class="blog-grid"></div>
+      <p id="blog-empty" style="display:none; text-align:center; color:#888; padding:40px 0;">まだ記事がありません。</p>
+    </div>
+  </section>
+
+  <div id="shared-bottom"></div>
+  <a href="#" class="page-top" aria-label="ページの先頭へ"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></a>
+
+</main>
+
+<script src="../common.js"></script>
+<script>
+(function () {
+  const list = document.getElementById('blogList');
+  const empty = document.getElementById('blog-empty');
+
+  function esc(s) {
+    return String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;')
+      .replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#39;");
+  }
+  function fmtDate(d) {
+    const m = String(d || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${m[1]}.${m[2]}.${m[3]}` : esc(d || '');
+  }
+
+  fetch('../blog/posts.json', { cache: 'no-store' })
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(data => {
+      const posts = data.posts ?? data;
+      if (!Array.isArray(posts) || posts.length === 0) {
+        list.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+      posts.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+      list.innerHTML = '';
+      posts.forEach(p => {
+        let imgSrc = '';
+        if (p.image) {
+          imgSrc = p.image.replace(/^\.\//, '../').replace(/^\.\.\//, '../../');
+        }
+        const bg = imgSrc ? `background-image:url('${esc(imgSrc)}');` : 'background:#f0f0f0;';
+        const el = document.createElement('article');
+        el.className = 'blog-card';
+        el.innerHTML = `
+          <a href="./posts/post.html#${encodeURIComponent(p.slug)}">
+            <div class="blog-image" style="${bg}"></div>
+            <div class="blog-body">
+              <time class="blog-date" datetime="${esc(p.date)}">${fmtDate(p.date)}</time>
+              <h2 class="blog-title">${esc(p.title)}</h2>
+              <p class="blog-excerpt">${esc(p.excerpt)}</p>
+            </div>
+          </a>`;
+        list.appendChild(el);
+      });
+    })
+    .catch(() => {
+      list.style.display = 'none';
+      empty.style.display = 'block';
+    });
+})();
+</script>
+
+</body>
+</html>

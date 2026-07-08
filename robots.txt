@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://atmos-dining.github.io/umeboshi-tenjinminami-site/sitemap.xml
