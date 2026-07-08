@@ -3,10 +3,10 @@
 :root {
   --header-h: 112px;
 
-  /* ===== THEME COLOR (UMEBOSHI / Izakaya Red) ===== */
-  --primary:        #a52020;
-  --primary-hover:  #831a1a;
-  --primary-soft:   #fef5f5;
+  /* ===== THEME COLOR (UMEBOSHI TENJINMINAMI / Izakaya Orange) ===== */
+  --primary:        #c1440e;
+  --primary-hover:  #9c380b;
+  --primary-soft:   #fdf1e7;
   --primary-ink:    #fff;
   --gold:           #d4891a;
   --gold-soft:      #fdf5e3;
@@ -159,7 +159,7 @@ body:not(.is-home) .section {
   background: var(--primary);
   color: #fff;
   border: 1px solid var(--primary);
-  box-shadow: 0 4px 14px rgba(165,32,32,0.3);
+  box-shadow: 0 4px 14px rgba(193,68,14,0.3);
   line-height: 0;
   z-index: 900;
   opacity: 0;
@@ -1175,7 +1175,7 @@ body:not(.is-home) .section {
   border-radius: 2px;
   font-size: 11px;
   color: var(--primary);
-  border: 1px solid rgba(165,32,32,0.3);
+  border: 1px solid rgba(193,68,14,0.3);
   background: var(--primary-soft);
 }
 
