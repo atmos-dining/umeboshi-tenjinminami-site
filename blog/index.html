@@ -19,6 +19,7 @@
   gtag('js', new Date());
   gtag('config', 'G-XXXXXXXXXX');
 </script>
+<script src="../vendor/blog-security.js"></script>
 </head>
 
 <body data-page="blog">
@@ -76,7 +77,7 @@
         if (p.image) {
           imgSrc = p.image.replace(/^\.\//, '../').replace(/^\.\.\//, '../../');
         }
-        const bg = imgSrc ? `background-image:url('${esc(imgSrc)}');` : 'background:#f0f0f0;';
+        const bg = imgSrc ? `background-image:url('${esc(BlogSecurity.imageURL(imgSrc))}');` : 'background:#f0f0f0;';
         const el = document.createElement('article');
         el.className = 'blog-card';
         el.innerHTML = `
