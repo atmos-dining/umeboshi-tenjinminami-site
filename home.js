@@ -9,6 +9,8 @@
   const light = /Line\//i.test(navigator.userAgent);
   const OPEN_DURATION = 1050;
   const WHEEL_GAP = 240;
+  const WHEEL_REARM_DELAY = 450;
+  const WHEEL_INTENT = 40;
   let frame = 0;
   let previousTime = 0;
   let progress = 0;
@@ -18,6 +20,11 @@
   let opening = null;
   let wheelHeld = false;
   let lastWheel = -Infinity;
+  let wheelStarted = -Infinity;
+  let wheelDirection = 0;
+  let wheelAmount = 0;
+  let wheelArmed = false;
+  let wheelTrough = Infinity;
   let touch = null;
   let heldKey = '';
   const motionAllowed = () => !reduced.matches && !light;
@@ -89,6 +96,10 @@
     previousTime = 0;
     opening = null;
     wheelHeld = false;
+    lastWheel = wheelStarted = -Infinity;
+    wheelDirection = wheelAmount = 0;
+    wheelArmed = false;
+    wheelTrough = Infinity;
     touch = null;
     heldKey = '';
     scene?.classList.toggle('motion-enabled', motionAllowed());
@@ -110,15 +121,52 @@
     if (!motionAllowed() || menuOpen() || event.ctrlKey || event.metaKey
       || !event.deltaY || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
     const now = performance.now();
-    // A quiet interval separates trackpad gestures, including their momentum.
-    if (wheelHeld && !opening && (now - lastWheel >= WHEEL_GAP || event.deltaY < 0)) wheelHeld = false;
-    if (opening || wheelHeld || (event.deltaY > 0 && canOpen())) {
+    const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? stage.offsetHeight : 1;
+    const magnitude = Math.abs(event.deltaY) * unit;
+    const direction = event.deltaY > 0 ? 1 : -1;
+
+    if (!wheelHeld) {
+      if (!opening && !(direction > 0 && canOpen())) return;
       event.preventDefault();
       wheelHeld = true;
-      lastWheel = now;
+      lastWheel = wheelStarted = now;
+      wheelDirection = direction;
+      wheelAmount = 0;
+      wheelArmed = false;
+      wheelTrough = Infinity;
       openNoren();
+      return;
     }
-  }, {passive:false});
+
+    // macOS momentum can bridge separate swipes without an idle interval.
+    // This is the renewed-force gate accepted on the OnO site (2026-11-12).
+    const idle = now - lastWheel >= WHEEL_GAP;
+    const reversed = direction !== wheelDirection && magnitude >= 8;
+    if (idle || reversed) {
+      wheelArmed = true;
+      wheelAmount = 0;
+      wheelTrough = Infinity;
+    }
+    lastWheel = now;
+    if (idle || magnitude >= 8) wheelDirection = direction;
+    if (!wheelArmed && now - wheelStarted >= WHEEL_REARM_DELAY) {
+      // Ignore the first swipe's acceleration; recognize force after its tail.
+      wheelTrough = Math.min(wheelTrough, magnitude);
+      if (wheelTrough <= 8 && magnitude >= 12 && magnitude >= wheelTrough * 3) {
+        wheelArmed = true;
+        wheelAmount = 0;
+      }
+    }
+    if (wheelArmed) wheelAmount += event.deltaY * unit;
+    if (!opening && (idle || (wheelArmed && Math.abs(wheelAmount) >= WHEEL_INTENT))) {
+      // Release the entire new gesture, not just its first event. No pointer
+      // movement or hit-target change is needed to leave the open HERO.
+      wheelHeld = false;
+      wheelArmed = false;
+      return;
+    }
+    event.preventDefault();
+  }, {passive:false, capture:true});
 
   window.addEventListener('touchstart', event => {
     touch = event.touches.length === 1 && !menuOpen() && !isField(event.target)

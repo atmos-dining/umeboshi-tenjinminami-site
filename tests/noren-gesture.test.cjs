@@ -44,7 +44,7 @@ function page({y = 0, reduced = false, line = false} = {}) {
     preventDefault() {if (this.cancelable) this.defaultPrevented = true;}, ...extra});
   function wheel(deltaY, extra = {}) {
     const e = event({deltaY, deltaX: 0, ...extra}); fire('window', 'wheel', e);
-    if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey) win.scrollTo({top: Math.max(0, win.scrollY + deltaY)});
+    if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey) win.scrollTo({top: Math.max(0, win.scrollY + deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? stage.offsetHeight : 1))});
     return e;
   }
   function key(key, extra = {}) {const e = event({key, repeat: false, ...extra}); fire('document', 'keydown', e); return e;}
@@ -68,7 +68,7 @@ test('long trackpad momentum stays in the HERO until a separate gesture', () => 
   const p = page(); p.wheel(1800);
   for (let i = 0; i < 150; i++) {p.advance(16); assert(p.wheel(Math.max(0.2, 300 * Math.exp(-i / 15))).defaultPrevented);}
   assert.equal(p.win.scrollY, 640); assert.equal(p.lift(), -115);
-  p.wheel(400, {cancelable: false}); assert.equal(p.win.scrollY, 640, 'non-cancelable tail is contained too');
+  p.wheel(0.2, {cancelable: false}); assert.equal(p.win.scrollY, 640, 'non-cancelable tail is contained too');
   p.advance(250); assert.equal(p.wheel(300).defaultPrevented, false); assert.equal(p.win.scrollY, 940);
 });
 
@@ -136,4 +136,64 @@ test('restored scroll, reduced motion, LINE, resize and background restoration',
 test('opening takes the same time at 60 and 120 Hz', () => {
   const samples = [60, 120].map(hz => {const p = page(); p.wheel(50); p.advance(525, hz); return [p.win.scrollY, p.lift()];});
   assert(Math.abs(samples[0][0] - samples[1][0]) < 0.01); assert(Math.abs(samples[0][1] - samples[1][1]) < 0.01);
+});
+
+test('renewed downward swipe releases HERO even when momentum never becomes idle', () => {
+  const p = page(); p.wheel(100);
+  for (let i = 0; i < 140; i++) {p.advance(8); p.wheel(Math.max(2, 100 * Math.exp(-i / 20)));}
+  assert.equal(p.win.scrollY, 640);
+  p.advance(8); p.wheel(20);
+  p.advance(8); p.wheel(20);
+  assert(p.win.scrollY > 640, 'second intentional swipe must escape the old momentum gate');
+  const previous = p.win.scrollY;
+  p.advance(8); p.wheel(2);
+  assert(p.win.scrollY > previous, 'the rest of the released gesture must stay native');
+});
+
+test('OnO physical-trace sample interpolation does not require an idle gap or pointer movement', () => {
+  // Magnitudes/timings from the accepted 2026-11-12 OnO fixed-pointer report.
+  // Interpolated samples, not an exact replay of all 637 original events.
+  const samples = [[398965,1],[399211,55],[399462,22],[399712,6],[399962,2],[400403,22],[400662,25],[400912,7],[401161,2],[401620,46],[401873,30],[402123,9],[402373,3],[402825,12],[403078,38],[403328,11],[403578,3],[403887,1],[404170,50],[404437,18],[404686,32],[404961,52]];
+  const p = page(); let last = samples[0][0];
+  for (let i = 0; i < samples.length - 1; i++) {
+    const [start, first] = samples[i], [end, next] = samples[i + 1];
+    for (let time = start; time < end; time += 8) {
+      p.advance(time - last); last = time;
+      p.wheel(first + (next - first) * (time - start) / (end - start), {clientX:612, clientY:398});
+    }
+  }
+  assert(p.win.scrollY > 640, 'continuous physical-style swipes must scroll past HERO');
+});
+
+test('initial acceleration and one long decaying fling never count as a second swipe', () => {
+  const p = page(); p.wheel(1);
+  for (let time = 8; time <= 3000; time += 8) {
+    p.advance(8);
+    const amount = time < 200 ? time / 2 : Math.max(0.2, 100 * Math.exp(-(time - 200) / 240));
+    assert(p.wheel(amount).defaultPrevented);
+  }
+  assert.equal(p.win.scrollY, 640);
+});
+
+test('new force during opening stays armed until the cloth finishes opening', () => {
+  const p = page(); p.wheel(100);
+  for (let time = 8; time < 600; time += 8) {p.advance(8); p.wheel(2);}
+  p.advance(8); p.wheel(20); p.advance(8); p.wheel(20);
+  assert(p.win.scrollY < 640, 'the HERO must finish opening before release');
+  for (let time = 0; time < 600; time += 8) {p.advance(8); p.wheel(2);}
+  assert(p.win.scrollY > 640, 'queued intentional input survives the animation');
+});
+
+test('no-idle reversal and line/page delta units release intentional input', () => {
+  for (const extra of [{deltaMode:0,delta:20},{deltaMode:1,delta:3},{deltaMode:2,delta:0.1}]) {
+    const p = page(); p.wheel(100);
+    for (let i = 0; i < 150; i++) {p.advance(8); p.wheel(2);}
+    p.advance(8); p.wheel(extra.delta, {deltaMode:extra.deltaMode});
+    p.advance(8); p.wheel(extra.delta, {deltaMode:extra.deltaMode});
+    assert(p.win.scrollY > 640);
+  }
+  const p = page(); p.wheel(100);
+  for (let i = 0; i < 150; i++) {p.advance(8); p.wheel(2);}
+  p.advance(8); p.wheel(-20); p.advance(8); p.wheel(-20);
+  assert(p.win.scrollY < 640);
 });
