@@ -7,19 +7,31 @@
   const enter = document.querySelector('.noren-enter');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const light = /Line\//i.test(navigator.userAgent);
+  const OPEN_DURATION = 1050;
+  const WHEEL_GAP = 240;
   let frame = 0;
   let previousTime = 0;
   let progress = 0;
   let target = 0;
   let range = 1;
   let sceneTop = 0;
+  let opening = null;
+  let wheelHeld = false;
+  let lastWheel = -Infinity;
+  let touch = null;
+  let heldKey = '';
   const motionAllowed = () => !reduced.matches && !light;
   const clamp = value => Math.max(0, Math.min(1, value));
   const ease = value => value * value * (3 - 2 * value);
+  const heroEnd = () => sceneTop + range;
+  const canOpen = () => scene && stage && motionAllowed()
+    && window.scrollY >= sceneTop - 2 && window.scrollY < heroEnd() - 2;
+  const menuOpen = () => document.body.style.overflow === 'hidden';
+  const isField = element => element?.closest?.('input,textarea,select,[contenteditable="true"],[role="dialog"],.drawer');
+  const isControl = element => isField(element) || element?.closest?.('a,button');
 
   function paint() {
     panels.forEach((panel, i) => {
-      // The middle cloth leads slightly; all three finish above the doorway.
       const delay = [0.025, 0, 0.045][i];
       const lifted = ease(clamp((progress - delay) / (1 - delay)));
       const sway = Math.sin(lifted * Math.PI);
@@ -28,12 +40,25 @@
     });
     if (photo) photo.style.transform = motionAllowed()
       ? `scale(${1.025 + ease(progress) * 0.045})` : '';
-    if (enter) enter.querySelector('span').textContent = progress > .97 ? 'お店のことを見る' : '暖簾をくぐる';
+    if (enter) {
+      enter.disabled = Boolean(opening);
+      enter.querySelector('span').textContent = progress > .97 ? 'お店のことを見る' : '暖簾をくぐる';
+    }
   }
 
   function animate(time) {
     frame = 0;
-    // Time-based smoothing feels the same on 60 Hz and 120 Hz screens.
+    if (opening) {
+      // One gesture opens the whole cloth, independent of distance or force.
+      const elapsed = clamp((time - opening.start) / OPEN_DURATION);
+      const amount = ease(elapsed);
+      window.scrollTo({top:opening.y + (heroEnd() - opening.y) * amount, behavior:'instant'});
+      progress = target = opening.progress + (1 - opening.progress) * amount;
+      if (elapsed === 1) opening = null;
+      paint();
+      if (opening) frame = requestAnimationFrame(animate);
+      return;
+    }
     const elapsed = previousTime ? Math.min(time - previousTime, 64) : 16;
     previousTime = time;
     progress += (target - progress) * (1 - Math.exp(-elapsed / 95));
@@ -44,7 +69,11 @@
   }
 
   function schedule() {
-    if (!scene || !stage || !motionAllowed() || document.hidden) return;
+    if (!scene || !stage || !motionAllowed() || document.hidden || opening) return;
+    // Also contain non-cancelable momentum events at the open HERO boundary.
+    if (wheelHeld && performance.now() - lastWheel < WHEEL_GAP && window.scrollY > heroEnd()) {
+      window.scrollTo({top:heroEnd(), behavior:'instant'});
+    }
     target = clamp((window.scrollY - sceneTop) / range);
     if (!frame && target !== progress) frame = requestAnimationFrame(animate);
   }
@@ -58,22 +87,91 @@
     cancelAnimationFrame(frame);
     frame = 0;
     previousTime = 0;
+    opening = null;
+    wheelHeld = false;
+    touch = null;
+    heldKey = '';
     scene?.classList.toggle('motion-enabled', motionAllowed());
     if (enter) enter.hidden = !motionAllowed();
     measure(false);
     progress = target = motionAllowed() ? clamp((window.scrollY - sceneTop) / range) : 0;
     paint();
   }
+  function openNoren() {
+    if (opening || !canOpen()) return;
+    cancelAnimationFrame(frame);
+    previousTime = 0;
+    opening = {start:performance.now(), y:window.scrollY, progress};
+    paint();
+    frame = requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('wheel', event => {
+    if (!motionAllowed() || menuOpen() || event.ctrlKey || event.metaKey
+      || !event.deltaY || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    const now = performance.now();
+    // A quiet interval separates trackpad gestures, including their momentum.
+    if (wheelHeld && !opening && (now - lastWheel >= WHEEL_GAP || event.deltaY < 0)) wheelHeld = false;
+    if (opening || wheelHeld || (event.deltaY > 0 && canOpen())) {
+      event.preventDefault();
+      wheelHeld = true;
+      lastWheel = now;
+      openNoren();
+    }
+  }, {passive:false});
+
+  window.addEventListener('touchstart', event => {
+    touch = event.touches.length === 1 && !menuOpen() && !isField(event.target)
+      ? {x:event.touches[0].clientX, y:event.touches[0].clientY, blocked:false} : null;
+  }, {passive:true});
+  window.addEventListener('touchmove', event => {
+    if (!touch || !motionAllowed() || menuOpen() || event.touches.length !== 1) return;
+    const dy = touch.y - event.touches[0].clientY;
+    const dx = touch.x - event.touches[0].clientX;
+    if (touch.blocked || opening || (dy > 4 && Math.abs(dy) > Math.abs(dx) && canOpen())) {
+      event.preventDefault();
+      touch.blocked = true;
+      openNoren();
+    }
+  }, {passive:false});
+  const endTouch = () => { touch = null; };
+  window.addEventListener('touchend', endTouch, {passive:true});
+  window.addEventListener('touchcancel', endTouch, {passive:true});
+
+  document.addEventListener('keydown', event => {
+    if (!motionAllowed() || menuOpen() || isControl(event.target)
+      || event.ctrlKey || event.metaKey || event.altKey) return;
+    const down = ['ArrowDown', 'PageDown', ' '].includes(event.key) && !event.shiftKey;
+    if (!down) {
+      if (['Escape', 'Home', 'End', 'ArrowUp', 'PageUp', ' '].includes(event.key)) configure();
+      return;
+    }
+    if (opening || (heldKey === event.key && event.repeat) || canOpen()) {
+      event.preventDefault();
+      heldKey = event.key;
+      openNoren();
+    }
+  });
+  document.addEventListener('keyup', event => { if (event.key === heldKey) heldKey = ''; });
+  // Links and the mobile menu remain usable during the entrance animation.
+  document.addEventListener('click', event => {
+    if (event.target.closest?.('a[href],.nav-toggle')) configure();
+  });
+  window.addEventListener('hashchange', configure);
   enter?.addEventListener('click', () => {
-    if (target > .97) document.getElementById('concept')?.scrollIntoView({behavior:'smooth'});
-    else window.scrollTo({top:sceneTop + range, behavior:motionAllowed() ? 'smooth' : 'auto'});
+    if (opening) return;
+    if (canOpen()) openNoren();
+    else document.getElementById('concept')?.scrollIntoView({behavior:'smooth'});
   });
   window.addEventListener('scroll', schedule, {passive:true});
   window.addEventListener('resize', measure, {passive:true});
   window.addEventListener('pageshow', configure);
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { cancelAnimationFrame(frame); frame = 0; previousTime = 0; }
-    else configure();
+    if (document.hidden) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      previousTime = 0;
+    } else configure();
   });
   reduced.addEventListener('change', configure);
   configure();

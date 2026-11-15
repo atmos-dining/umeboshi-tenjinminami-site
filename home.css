@@ -1,4 +1,4 @@
-/* A noren that belongs to the page: native scroll, no wheel/touch interception. */
+/* One entrance gesture opens the noren; the next continues into the page. */
 :root{--paper:#f3efe5;--ink:#2e2923;--serif:'Shippori Mincho','Yu Mincho',serif;--rust:#b34c2c}
 body.is-home{background:var(--paper);color:var(--ink)}
 .skip-link{position:fixed;top:-100px;left:16px;z-index:2000;padding:12px;background:var(--paper)}.skip-link:focus{top:12px}
