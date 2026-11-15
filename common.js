@@ -7,29 +7,21 @@
 
   const currentPage = document.body.dataset.page || 'home';
 
-  function getRootPath() {
-    const scripts = document.querySelectorAll('script[src]');
-    for (const s of scripts) {
-      const src = s.getAttribute('src');
-      if (src && src.includes('common.js')) {
-        const ups = (src.match(/\.\.\//g) || []).length;
-        return ups > 0 ? '../'.repeat(ups) : './';
-      }
-    }
-    return './';
+  const ownScript = [...document.scripts].find(s => /(?:^|\/)common\.js(?:\?|$)/.test(s.src));
+  const ROOT = new URL('.', ownScript ? ownScript.src : location.href).pathname;
+  function resolvePartial(html) {
+    return html.replaceAll('/umeboshi-tenjinminami-site/', ROOT)
+      .replace(/src="\.\//g, `src="${ROOT}`);
   }
-
-  const ROOT = getRootPath();
 
   function loadHeader() {
     const mount = document.getElementById('shared-header');
     if (!mount) return;
 
     fetch(ROOT + 'partials/header.html')
-      .then(r => r.text())
+      .then(r => { if (!r.ok) throw new Error('partial'); return r.text(); })
       .then(html => {
-        html = html.replace(/href="\.\//g, `href="${ROOT}`);
-        html = html.replace(/src="\.\//g, `src="${ROOT}`);
+        html = resolvePartial(html);
         mount.outerHTML = html;
         initNav();
         initDrawer();
@@ -53,15 +45,21 @@
     if (!btn || !drawer || !overlay) return;
 
     function openDrawer() {
+      drawer.inert = false;
       drawer.classList.add('is-open');
       overlay.classList.add('is-open');
       document.body.style.overflow = 'hidden';
       btn.setAttribute('aria-expanded', 'true');
       drawer.setAttribute('aria-hidden', 'false');
       overlay.setAttribute('aria-hidden', 'false');
+      document.querySelector('main').inert = true;
+      drawer.querySelector('button').focus();
     }
 
     function closeDrawer() {
+      drawer.inert = true;
+      document.querySelector('main').inert = false;
+      btn.focus();
       drawer.classList.remove('is-open');
       overlay.classList.remove('is-open');
       document.body.style.overflow = '';
@@ -83,7 +81,14 @@
     );
 
     document.addEventListener('keydown', e => {
+      if (!drawer.classList.contains('is-open')) return;
       if (e.key === 'Escape') closeDrawer();
+      if (e.key === 'Tab') {
+        const items = [...drawer.querySelectorAll('button, a[href]')];
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
   }
 
@@ -92,9 +97,9 @@
     if (!mount) return;
 
     fetch(ROOT + 'partials/bottom.html')
-      .then(r => r.text())
+      .then(r => { if (!r.ok) throw new Error('partial'); return r.text(); })
       .then(html => {
-        mount.innerHTML = html;
+        mount.innerHTML = resolvePartial(html);
         mount.querySelectorAll('.section').forEach(sec => sec.classList.add('is-inview'));
 
         if (currentPage === 'home') {
@@ -104,7 +109,7 @@
         const hash = location.hash;
         if (hash) {
           setTimeout(() => {
-            const target = document.querySelector(hash);
+            const target = document.getElementById(decodeURIComponent(hash.slice(1)));
             if (target) target.scrollIntoView({ behavior: 'smooth' });
           }, 400);
         }
@@ -113,64 +118,11 @@
   }
 
   function initStickyHeader() {
-    const header     = document.querySelector('.site-header');
+    const header = document.querySelector('.site-header');
     if (!header) return;
-    const inner      = header.querySelector('.header-inner');
-    const logoLink   = header.querySelector('.site-logo');
-    const logoImg    = header.querySelector('.site-logo-img');
-    const hRight     = header.querySelector('.header-right');
-    const reserveBtn = header.querySelector('.header-reserve');
-    if (!inner || !logoImg) return;
-
-    logoLink.style.display    = 'flex';
-    logoLink.style.alignItems = 'center';
-
-    const RANGE = 200;
-
-    if (reserveBtn) {
-      reserveBtn.style.alignItems     = 'center';
-      reserveBtn.style.justifyContent = 'center';
-      reserveBtn.style.paddingTop     = '0';
-      reserveBtn.style.paddingBottom  = '0';
-      reserveBtn.style.boxSizing      = 'border-box';
-    }
-
-    function lerp(a, b, t) { return a + (b - a) * t; }
-
-    function onScroll() {
-      const isMobile = window.innerWidth <= 900;
-      const t = Math.min(Math.max(window.scrollY / RANGE, 0), 1);
-      const e = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-
-      if (isMobile) {
-        inner.style.paddingTop    = '';
-        inner.style.paddingBottom = '';
-        inner.style.paddingLeft   = '';
-        inner.style.paddingRight  = '';
-        logoImg.style.height      = '40px';
-        if (reserveBtn) {
-          reserveBtn.style.height       = '';
-          reserveBtn.style.borderRadius = '';
-        }
-      } else {
-        inner.style.paddingTop    = lerp(16, 0,  e) + 'px';
-        inner.style.paddingBottom = lerp(16, 0,  e) + 'px';
-        inner.style.paddingLeft   = lerp(32, 24, e) + 'px';
-        inner.style.paddingRight  = lerp(32, 0,  e) + 'px';
-        logoImg.style.height      = lerp(80, 56, e) + 'px';
-        if (reserveBtn) {
-          reserveBtn.style.display      = 'flex';
-          reserveBtn.style.height       = lerp(46, 56, e) + 'px';
-          reserveBtn.style.borderRadius = lerp(4,  0,  e) + 'px';
-        }
-      }
-
-      if (hRight) hRight.style.gap = isMobile ? '' : lerp(16, 0, e) + 'px';
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    onScroll();
+    const update = () => header.classList.toggle('has-scrolled', scrollY > 30);
+    window.addEventListener('scroll', update, {passive:true});
+    update();
   }
 
   function initPageTop() {
@@ -189,6 +141,7 @@
   function initScrollReveal() {
     const sections = document.querySelectorAll('.section');
     if (!sections.length) return;
+    if (!('IntersectionObserver' in window)) { sections.forEach(s => s.classList.add('is-inview')); return; }
 
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -213,7 +166,7 @@
       const href = a.getAttribute('href') || '';
 
       if (href.startsWith('tel:')) {
-        gtag('event', 'click_tel', {
+        gtag('event', 'phone_click', {
           event_category: 'contact',
           event_label: href.replace('tel:', ''),
           page_location: location.href
@@ -221,7 +174,7 @@
       }
 
       if (href.includes('toreta') || href.includes('autoreserve') || href.includes('hotpepper') || href.includes('maps/reserve')) {
-        gtag('event', 'click_reserve', {
+        gtag('event', 'reservation_click', {
           event_category: 'conversion',
           event_label: a.textContent.trim().slice(0, 50),
           page_location: location.href

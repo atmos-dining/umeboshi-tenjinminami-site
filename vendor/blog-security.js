@@ -2,10 +2,11 @@
 (() => {
   'use strict';
   const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
+  const siteRoot = new URL('../', document.currentScript.src);
   function imageURL(value) {
     if (typeof value !== 'string' || !value.trim()) return '';
     try {
-      const url = new URL(value, document.baseURI);
+      const url = value.startsWith('/images/') ? new URL(value.slice(1), siteRoot) : new URL(value, document.baseURI);
       if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) return '';
       // Safe inside either HTML attributes or a quoted CSS url().
       return url.href.replace(/["'()<>\\]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());

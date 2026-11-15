@@ -1,0 +1,41 @@
+/* A noren that belongs to the page: native scroll, no wheel/touch interception. */
+:root{--paper:#f3efe5;--ink:#2e2923;--serif:'Shippori Mincho','Yu Mincho',serif;--rust:#b34c2c}
+body.is-home{background:var(--paper);color:var(--ink)}
+.skip-link{position:fixed;top:-100px;left:16px;z-index:2000;padding:12px;background:var(--paper)}.skip-link:focus{top:12px}
+.noren-scene{position:relative;height:100svh;min-height:680px;background:#37291c}
+.noren-scene.motion-enabled{height:155svh;min-height:980px}
+.noren-stage{position:sticky;top:0;height:100svh;min-height:600px;overflow:hidden;color:#fff}
+.noren-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.noren-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(24,18,12,.62),transparent 55%)}
+.noren-cloth{position:absolute;inset:0 0 auto;height:58%;display:grid;grid-template-columns:26% 48% 26%;gap:4px;z-index:2;color:var(--ink);pointer-events:none}
+.noren-panel{position:relative;background-color:#f2ecdd;background-image:repeating-linear-gradient(90deg,transparent 0 2px,#826b4820 2px 3px),repeating-linear-gradient(0deg,transparent 0 3px,#5e492a0a 3px 4px),linear-gradient(90deg,#b7a48b33,transparent 15%,#fff5 45%,transparent 75%,#816a4422);box-shadow:0 12px 25px #0003;transform-origin:50% 0;will-change:transform;display:flex;align-items:center;justify-content:center}
+.noren-panel:after{content:'';position:absolute;left:0;right:0;bottom:14px;border-bottom:1px solid #66513230}
+.noren-left{border-radius:0 0 8% 3%}.noren-right{border-radius:0 0 3% 9%}.noren-center{height:97%;flex-direction:column;border-radius:0 0 3% 4%;padding:85px 20px 30px}
+.noren-panel p{writing-mode:vertical-rl;font-family:var(--serif);font-size:clamp(16px,1.7vw,23px);letter-spacing:.25em;line-height:2.4;margin:50px 0 0}
+.noren-center h1{width:min(460px,90%);margin:10px 0 0}.noren-center h1 img{width:100%;height:auto}
+.noren-eyebrow{font-size:9px;letter-spacing:.25em}.noren-stamp{color:var(--rust);border:1px solid currentColor;font:12px var(--serif);letter-spacing:.15em;padding:5px 12px;transform:rotate(-3deg)}
+.noren-welcome{position:absolute;left:6%;bottom:80px;text-shadow:0 2px 15px #0008}.noren-kicker{font-size:12px;letter-spacing:.18em;margin:0 0 12px}
+.noren-welcome h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,3.4vw,50px);letter-spacing:.13em;line-height:1.6}
+.noren-hours{font-size:12px;letter-spacing:.1em;margin:20px 0 0}.noren-hours span{margin-left:18px}
+.noren-book{position:absolute;right:6%;bottom:90px;background:var(--rust);color:white;padding:20px 26px;display:flex;gap:40px;font:15px var(--serif);letter-spacing:.14em;transition:background .2s}.noren-book:hover{background:#963b20}
+.noren-enter{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);background:transparent;border:0;color:white;display:flex;align-items:center;gap:20px;cursor:pointer;font:11px 'Noto Sans JP',sans-serif;letter-spacing:.15em;padding:12px}.noren-enter[hidden]{display:none}.noren-enter span:last-child{font-size:22px}
+.noren-caption{position:absolute;right:6%;bottom:32px;font-size:8px;letter-spacing:.2em;opacity:.8}
+.home-strip{display:flex;justify-content:space-between;background:var(--rust);color:#fff;padding:20px 6%;font:12px var(--serif);letter-spacing:.16em}
+.home-wrap{width:min(1160px,88%);margin-inline:auto}.home-eyebrow{font-size:10px;letter-spacing:.2em;margin:0 0 32px;color:var(--rust)}.home-heading{font:600 clamp(30px,4vw,49px)/1.85 var(--serif);letter-spacing:.13em}
+.home-intro{padding-block:120px;display:grid;grid-template-columns:1fr 1fr;gap:12%;scroll-margin-top:90px}.home-intro-copy{padding-top:65px;font-size:14px;line-height:2.5}.home-intro-copy p{margin:0 0 28px}.home-text-link{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:15px 0;border-bottom:1px solid currentColor;font-size:13px;letter-spacing:.08em;max-width:280px}.home-text-link span{transition:transform .2s}.home-text-link:hover span{transform:translateX(5px)}
+.home-food{background:#e8dfce;padding:90px 0 100px;scroll-margin-top:70px}.home-food-head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:60px}.home-food-head>p{font-size:13px;line-height:2.2}
+.home-signature{display:grid;grid-template-columns:1.5fr 1fr;align-items:center;gap:8%;padding-right:6%}.home-signature>img{width:100%;height:530px;object-fit:cover}.home-signature h3{font:600 clamp(30px,3.5vw,46px) var(--serif);letter-spacing:.12em;margin:20px 0 30px}.home-signature p{font-size:14px;line-height:2.4}
+.home-dishes{display:grid;grid-template-columns:repeat(3,1fr);gap:35px;margin-top:85px}.home-dishes article>img{width:100%;height:260px;object-fit:cover}.home-dishes article>span{display:block;font-size:10px;letter-spacing:.17em;color:var(--rust);margin:25px 0 15px}.home-dishes h3{font:600 23px var(--serif);letter-spacing:.04em}.home-dishes p{font-size:13px;line-height:2.2;margin:20px 0}
+.home-space{padding-block:110px;display:grid;grid-template-columns:1fr 1fr;gap:48px 60px;scroll-margin-top:80px}.home-space-title{grid-column:1/-1}.home-space>img{width:100%;height:400px;object-fit:cover}.home-space-note{align-self:center;font-size:14px;line-height:2.4}.home-space-note>span{font-size:12px;letter-spacing:.17em;color:var(--rust)}
+.home-news{border-top:1px solid #2e292333;padding-block:65px;display:grid;grid-template-columns:1fr 1.7fr;gap:70px;scroll-margin-top:90px}.home-news h2{font:600 28px var(--serif);letter-spacing:.12em}.home-news .home-eyebrow{margin-bottom:16px}.home-news .home-text-link{max-width:220px;margin-top:25px}.home-news-row{display:grid;grid-template-columns:90px 1fr 20px;gap:25px;align-items:center;padding:30px 0;border-bottom:1px solid #2e29232a;font-size:14px}.home-news-row time{font-size:11px;color:var(--rust)}
+.is-home .site-header{background:rgba(243,239,229,.96)}
+@media(min-width:901px){.is-home .site-logo-img{max-height:55px}.is-home .header-inner{min-height:72px}}
+@media(max-width:700px){
+.noren-scene{min-height:650px}.noren-stage{min-height:650px}.noren-scene.motion-enabled{min-height:970px}
+.noren-cloth{height:53%;grid-template-columns:17% 66% 17%;gap:3px}.noren-center{padding:80px 8px 24px}.noren-center h1{width:100%;margin:25px 0}.noren-panel p{font-size:13px;letter-spacing:.16em;line-height:1.8;margin-top:65px}.noren-eyebrow{font-size:7px;letter-spacing:.12em}.noren-stamp{font-size:10px;padding:4px 7px}
+.noren-photo{object-position:53% 55%}.noren-welcome{left:7%;bottom:140px}.noren-kicker{font-size:10px}.noren-welcome h2{font-size:31px}.noren-hours{font-size:10px;margin-top:15px}.noren-hours span{display:block;margin:5px 0 0}.noren-book{left:7%;right:auto;bottom:65px;padding:14px 22px;font-size:13px;gap:35px}.noren-enter{left:auto;right:5%;bottom:66px;transform:none;font-size:10px;writing-mode:vertical-rl;gap:14px}.noren-caption{bottom:25px;left:7%;right:auto;font-size:7px}
+.home-strip{padding:17px 7%;font-size:10px}.home-strip span:last-child{font-size:9px}.home-wrap{width:86%}.home-intro{padding-block:75px;grid-template-columns:1fr;gap:30px}.home-intro-copy{padding-top:0;font-size:13px}.home-eyebrow{margin-bottom:23px}.home-heading{font-size:33px}
+.home-food{padding:70px 0}.home-food-head{display:block;margin-bottom:35px}.home-food-head>p{margin-top:25px;font-size:12px}.home-signature{display:block;padding:0}.home-signature>img{height:300px}.home-signature>div{padding:35px 7% 0}.home-signature h3{font-size:32px;margin:12px 0 20px}.home-signature p{font-size:13px}.home-dishes{grid-template-columns:1fr;gap:45px;margin-top:55px}.home-dishes article>img{height:280px}.home-dishes h3{font-size:24px}.home-dishes p{margin:15px 0}.home-space{padding-block:75px;grid-template-columns:1fr;gap:30px}.home-space>img{height:300px}.home-space-note p{margin-bottom:0}.home-news{grid-template-columns:1fr;gap:15px;padding-block:45px}.home-news-row{grid-template-columns:75px 1fr 12px;gap:15px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.noren-panel{will-change:auto}.noren-scene.motion-enabled{height:100svh;min-height:650px}}
+.noren-center h1 img{height:clamp(130px,26svh,230px);object-fit:contain}
+@media(max-width:700px){.noren-center h1{margin:12px 0}.noren-center h1 img{height:clamp(110px,20svh,160px)}}

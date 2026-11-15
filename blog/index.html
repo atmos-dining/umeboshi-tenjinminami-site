@@ -8,17 +8,10 @@
 <link rel="icon" href="../images/tenjinminami_icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css?v=20261115">
 <link rel="canonical" href="https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
+<script src="../analytics.js?v=20261115" defer></script>
 <script src="../vendor/blog-security.js"></script>
 </head>
 
@@ -46,7 +39,7 @@
 
 </main>
 
-<script src="../common.js"></script>
+<script src="../common.js?v=20261115"></script>
 <script>
 (function () {
   const list = document.getElementById('blogList');
@@ -81,7 +74,7 @@
         const el = document.createElement('article');
         el.className = 'blog-card';
         el.innerHTML = `
-          <a href="./posts/post.html#${encodeURIComponent(p.slug)}">
+          <a href="./posts/post.html?slug=${encodeURIComponent(p.slug)}">
             <div class="blog-image" style="${bg}"></div>
             <div class="blog-body">
               <time class="blog-date" datetime="${esc(p.date)}">${fmtDate(p.date)}</time>

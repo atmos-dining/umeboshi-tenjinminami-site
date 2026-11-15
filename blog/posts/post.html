@@ -3,22 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>ブログ｜食堂 うめぼし 天神南</title>
+<link rel="canonical" id="canonical-link" href="https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/">
+<meta property="og:url" id="og-url" content="https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="../../images/tenjinminami_icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css?v=20261115">
 <script src="../../vendor/dompurify/purify.min.js"></script>
 <script src="../../vendor/marked/marked.umd.js"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
+<script src="../../analytics.js?v=20261115" defer></script>
 <style>
   .post-hero {
     width: 100%;
@@ -109,7 +104,7 @@
 
 </main>
 
-<script src="../../common.js"></script>
+<script src="../../common.js?v=20261115"></script>
 <script>
 (function () {
   function esc(s) {
@@ -121,7 +116,16 @@
     return m ? `${m[1]}年${m[2]}月${m[3]}日` : esc(d || '');
   }
 
-  const slug = decodeURIComponent(location.hash.slice(1)) || new URLSearchParams(location.search).get('slug');
+  let legacySlug = '';
+  try { legacySlug = decodeURIComponent(location.hash.slice(1)); } catch {}
+  const slug = new URLSearchParams(location.search).get('slug') || legacySlug;
+  if (slug) {
+    const query = '?slug=' + encodeURIComponent(slug);
+    const canonical = 'https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/posts/post.html' + query;
+    document.getElementById('canonical-link').href = canonical;
+    document.getElementById('og-url').content = canonical;
+    if (location.hash) history.replaceState(null, '', location.pathname + query);
+  }
   const section = document.getElementById('post-section');
 
   if (!slug) {
@@ -162,7 +166,7 @@
           ${imgSrc ? `<img src="${esc(BlogSecurity.imageURL(imgSrc))}" alt="${esc(post.title)}" class="post-hero">` : ''}
           <div class="post-body">${BlogSecurity.sanitizeHTML(bodyHtml)}</div>
           <div class="post-back">
-            <a href="../index.html" class="btn-secondary">← ブログ一覧に戻る</a>
+            <a href="../" class="btn-secondary">← ブログ一覧に戻る</a>
           </div>
         </div>`;
     })
