@@ -2,24 +2,33 @@
 :root{--paper:#f3efe5;--ink:#2e2923;--serif:'Shippori Mincho','Yu Mincho',serif;--rust:#b34c2c}
 body.is-home{background:var(--paper);color:var(--ink)}
 .skip-link{position:fixed;top:-100px;left:16px;z-index:2000;padding:12px;background:var(--paper)}.skip-link:focus{top:12px}
-.noren-scene{position:relative;height:100svh;min-height:680px;background:#37291c}
-.noren-scene.motion-enabled{height:155svh;min-height:980px}
-.noren-stage{position:sticky;top:0;height:100svh;min-height:600px;overflow:hidden;color:#fff}
-.noren-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%}
-.noren-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(24,18,12,.62),transparent 55%)}
-.noren-cloth{position:absolute;inset:0 0 auto;height:58%;display:grid;grid-template-columns:26% 48% 26%;gap:4px;z-index:2;color:var(--ink);pointer-events:none}
-.noren-panel{position:relative;background-color:#f2ecdd;background-image:repeating-linear-gradient(90deg,transparent 0 2px,#826b4820 2px 3px),repeating-linear-gradient(0deg,transparent 0 3px,#5e492a0a 3px 4px),linear-gradient(90deg,#b7a48b33,transparent 15%,#fff5 45%,transparent 75%,#816a4422);box-shadow:0 12px 25px #0003;transform-origin:50% 0;will-change:transform;display:flex;align-items:center;justify-content:center}
-.noren-panel:after{content:'';position:absolute;left:0;right:0;bottom:14px;border-bottom:1px solid #66513230}
-.noren-left{border-radius:0 0 8% 3%}.noren-right{border-radius:0 0 3% 9%}.noren-center{height:97%;flex-direction:column;border-radius:0 0 3% 4%;padding:85px 20px 30px}
-.noren-panel p{writing-mode:vertical-rl;font-family:var(--serif);font-size:clamp(16px,1.7vw,23px);letter-spacing:.25em;line-height:2.4;margin:50px 0 0}
-.noren-center h1{width:min(460px,90%);margin:10px 0 0}.noren-center h1 img{width:100%;height:auto}
-.noren-eyebrow{font-size:9px;letter-spacing:.25em}.noren-stamp{color:var(--rust);border:1px solid currentColor;font:12px var(--serif);letter-spacing:.15em;padding:5px 12px;transform:rotate(-3deg)}
-.noren-welcome{position:absolute;left:6%;bottom:80px;text-shadow:0 2px 15px #0008}.noren-kicker{font-size:12px;letter-spacing:.18em;margin:0 0 12px}
+/* The extra scroll distance lets the cloth lift before the doorway passes. */
+.noren-scene{position:relative;height:100svh;min-height:650px;background:#37291c}
+.noren-scene.motion-enabled{height:180svh;min-height:1170px}
+.noren-stage{position:sticky;top:0;height:100svh;min-height:650px;overflow:hidden;isolation:isolate;color:#fff}
+.noren-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%;transform:scale(1.025);will-change:transform}
+.noren-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(24,18,12,.78),rgba(24,18,12,.15) 46%,transparent 72%);pointer-events:none}
+.noren-cloth{position:absolute;inset:0 0 auto;height:min(63%,calc(100% - 295px));display:grid;grid-template-columns:24% 52% 24%;gap:4px;z-index:2;color:var(--ink);pointer-events:none;perspective:1400px}
+.noren-panel{position:relative;background-color:#eee7d8;background-image:linear-gradient(90deg,#69553712,transparent 11%,#fff5 37%,transparent 59%,#7762470a 77%,#fff3 94%,#65523916),repeating-linear-gradient(90deg,transparent 0 2px,#6d573006 2px 3px),repeating-linear-gradient(0deg,transparent 0 3px,#58462805 3px 4px);box-shadow:0 16px 24px #20160826;transform-origin:50% 0;will-change:transform;backface-visibility:hidden;display:flex;align-items:center;justify-content:center}
+.noren-panel:after{content:'';position:absolute;left:0;right:0;bottom:13px;border-bottom:1px solid #66513226;box-shadow:0 1px #fff4}
+.noren-left{border-radius:0 0 6% 2%}.noren-right{border-radius:0 0 2% 7%}
+.noren-center{height:98%;flex-direction:column;border-radius:0 0 2% 3%;padding:80px 20px 35px}
+.noren-panel p{writing-mode:vertical-rl;font-family:var(--serif);font-size:clamp(15px,1.6vw,21px);letter-spacing:.24em;line-height:2.5;margin:45px 0 0}
+.noren-center h1{width:min(460px,90%);margin:14px 0}.noren-center h1 img{width:100%;height:clamp(130px,25svh,225px);object-fit:contain}
+.noren-eyebrow{font-size:9px;letter-spacing:.26em;color:#625548}
+.noren-stamp{color:#934127;border:1px solid #93412780;font:12px var(--serif);letter-spacing:.16em;padding:6px 14px;transform:rotate(-3deg)}
+.noren-welcome{position:absolute;left:6%;bottom:86px;z-index:1;text-shadow:0 2px 15px #0008}
+.noren-kicker{font-size:11px;letter-spacing:.18em;margin:0 0 12px}
 .noren-welcome h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,3.4vw,50px);letter-spacing:.13em;line-height:1.6}
-.noren-hours{font-size:12px;letter-spacing:.1em;margin:20px 0 0}.noren-hours span{margin-left:18px}
-.noren-book{position:absolute;right:6%;bottom:90px;background:var(--rust);color:white;padding:20px 26px;display:flex;gap:40px;font:15px var(--serif);letter-spacing:.14em;transition:background .2s}.noren-book:hover{background:#963b20}
-.noren-enter{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);background:transparent;border:0;color:white;display:flex;align-items:center;gap:20px;cursor:pointer;font:11px 'Noto Sans JP',sans-serif;letter-spacing:.15em;padding:12px}.noren-enter[hidden]{display:none}.noren-enter span:last-child{font-size:22px}
-.noren-caption{position:absolute;right:6%;bottom:32px;font-size:8px;letter-spacing:.2em;opacity:.8}
+.noren-hours{font-size:12px;letter-spacing:.1em;margin:18px 0 0}.noren-hours span{margin-left:18px}
+.noren-book{position:absolute;right:6%;bottom:90px;z-index:3;background:#a24428;color:#fff;padding:20px 26px;display:flex;gap:40px;font:15px var(--serif);letter-spacing:.14em;transition:background .2s}.noren-book:hover{background:#88351f}
+.noren-enter{position:absolute;left:50%;bottom:22px;z-index:3;transform:translateX(-50%);background:transparent;border:0;color:#fff;display:flex;align-items:center;gap:16px;cursor:pointer;font:11px 'Noto Sans JP',sans-serif;letter-spacing:.15em;padding:12px 18px;min-height:44px;text-shadow:0 1px 8px #0008}
+.noren-enter[hidden]{display:none}
+.noren-scroll-line{position:relative;display:block;width:1px;height:30px;background:#ffffff59;overflow:hidden}
+.noren-scroll-line:after{content:'';position:absolute;inset:0;background:#fff;animation:noren-invite 2.8s ease-in-out infinite}
+@keyframes noren-invite{0%{transform:translateY(-105%)}65%,100%{transform:translateY(105%)}}
+.noren-caption{position:absolute;right:6%;bottom:33px;z-index:1;font-size:8px;letter-spacing:.2em;color:#fff}
+.noren-stage a:focus-visible,.noren-stage button:focus-visible{outline-color:#fff}
 .home-strip{display:flex;justify-content:space-between;background:var(--rust);color:#fff;padding:20px 6%;font:12px var(--serif);letter-spacing:.16em}
 .home-wrap{width:min(1160px,88%);margin-inline:auto}.home-eyebrow{font-size:10px;letter-spacing:.2em;margin:0 0 32px;color:var(--rust)}.home-heading{font:600 clamp(30px,4vw,49px)/1.85 var(--serif);letter-spacing:.13em}
 .home-intro{padding-block:120px;display:grid;grid-template-columns:1fr 1fr;gap:12%;scroll-margin-top:90px}.home-intro-copy{padding-top:65px;font-size:14px;line-height:2.5}.home-intro-copy p{margin:0 0 28px}.home-text-link{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:15px 0;border-bottom:1px solid currentColor;font-size:13px;letter-spacing:.08em;max-width:280px}.home-text-link span{transition:transform .2s}.home-text-link:hover span{transform:translateX(5px)}
@@ -31,11 +40,8 @@ body.is-home{background:var(--paper);color:var(--ink)}
 .is-home .site-header{background:rgba(243,239,229,.96)}
 @media(min-width:901px){.is-home .site-logo-img{max-height:55px}.is-home .header-inner{min-height:72px}}
 @media(max-width:700px){
-.noren-scene{min-height:650px}.noren-stage{min-height:650px}.noren-scene.motion-enabled{min-height:970px}
-.noren-cloth{height:53%;grid-template-columns:17% 66% 17%;gap:3px}.noren-center{padding:80px 8px 24px}.noren-center h1{width:100%;margin:25px 0}.noren-panel p{font-size:13px;letter-spacing:.16em;line-height:1.8;margin-top:65px}.noren-eyebrow{font-size:7px;letter-spacing:.12em}.noren-stamp{font-size:10px;padding:4px 7px}
-.noren-photo{object-position:53% 55%}.noren-welcome{left:7%;bottom:140px}.noren-kicker{font-size:10px}.noren-welcome h2{font-size:31px}.noren-hours{font-size:10px;margin-top:15px}.noren-hours span{display:block;margin:5px 0 0}.noren-book{left:7%;right:auto;bottom:65px;padding:14px 22px;font-size:13px;gap:35px}.noren-enter{left:auto;right:5%;bottom:66px;transform:none;font-size:10px;writing-mode:vertical-rl;gap:14px}.noren-caption{bottom:25px;left:7%;right:auto;font-size:7px}
+.noren-cloth{height:min(57%,calc(100% - 325px));grid-template-columns:16% 68% 16%;gap:3px}.noren-center{padding:80px 8px 30px}.noren-center h1{width:100%;margin:16px 0}.noren-center h1 img{height:clamp(110px,21svh,170px)}.noren-panel p{font-size:12px;letter-spacing:.16em;line-height:2;margin-top:65px}.noren-eyebrow{font-size:7px;letter-spacing:.12em}.noren-stamp{font-size:10px;padding:5px 9px}
+.noren-photo{object-position:53% 55%}.noren-welcome{left:7%;bottom:145px}.noren-kicker{font-size:10px}.noren-welcome h2{font-size:30px;line-height:1.55}.noren-hours{font-size:11px;margin-top:15px}.noren-hours span{display:block;margin:5px 0 0}.noren-book{left:7%;right:auto;bottom:69px;padding:14px 22px;font-size:13px;gap:35px}.noren-enter{left:auto;right:5%;bottom:60px;transform:none;font-size:10px;writing-mode:vertical-rl;gap:14px;padding:12px;min-width:44px}.noren-scroll-line{width:1px;height:30px}.noren-caption{bottom:27px;left:7%;right:auto;font-size:7px}
 .home-strip{padding:17px 7%;font-size:10px}.home-strip span:last-child{font-size:9px}.home-wrap{width:86%}.home-intro{padding-block:75px;grid-template-columns:1fr;gap:30px}.home-intro-copy{padding-top:0;font-size:13px}.home-eyebrow{margin-bottom:23px}.home-heading{font-size:33px}
 .home-food{padding:70px 0}.home-food-head{display:block;margin-bottom:35px}.home-food-head>p{margin-top:25px;font-size:12px}.home-signature{display:block;padding:0}.home-signature>img{height:300px}.home-signature>div{padding:35px 7% 0}.home-signature h3{font-size:32px;margin:12px 0 20px}.home-signature p{font-size:13px}.home-dishes{grid-template-columns:1fr;gap:45px;margin-top:55px}.home-dishes article>img{height:280px}.home-dishes h3{font-size:24px}.home-dishes p{margin:15px 0}.home-space{padding-block:75px;grid-template-columns:1fr;gap:30px}.home-space>img{height:300px}.home-space-note p{margin-bottom:0}.home-news{grid-template-columns:1fr;gap:15px;padding-block:45px}.home-news-row{grid-template-columns:75px 1fr 12px;gap:15px;font-size:12px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.noren-panel{will-change:auto}.noren-scene.motion-enabled{height:100svh;min-height:650px}}
-.noren-center h1 img{height:clamp(130px,26svh,230px);object-fit:contain}
-@media(max-width:700px){.noren-center h1{margin:12px 0}.noren-center h1 img{height:clamp(110px,20svh,160px)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.noren-panel,.noren-photo{will-change:auto}.noren-photo{transform:none}.noren-scroll-line:after{animation:none}.noren-scene.motion-enabled{height:100svh;min-height:650px}}
