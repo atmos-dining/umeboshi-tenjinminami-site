@@ -17,7 +17,7 @@ body.is-home{background:var(--paper);color:var(--ink)}
 .noren-center h1{width:min(460px,90%);margin:14px 0}.noren-center h1 img{width:100%;height:clamp(130px,25svh,225px);object-fit:contain}
 .noren-eyebrow{font-size:9px;letter-spacing:.26em;color:#625548}
 .noren-stamp{color:#934127;border:1px solid #93412780;font:12px var(--serif);letter-spacing:.16em;padding:6px 14px;transform:rotate(-3deg)}
-.noren-welcome{position:absolute;left:6%;bottom:86px;z-index:1;text-shadow:0 2px 15px #0008}
+.noren-welcome{position:absolute;left:6%;bottom:56px;z-index:1;text-shadow:0 2px 15px #0008}
 .noren-kicker{font-size:11px;letter-spacing:.18em;margin:0 0 12px}
 .noren-welcome h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,3.4vw,50px);letter-spacing:.13em;line-height:1.6}
 .noren-hours{font-size:12px;letter-spacing:.1em;margin:18px 0 0}.noren-hours span{margin-left:18px}
