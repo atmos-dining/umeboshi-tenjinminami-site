@@ -1378,13 +1378,26 @@ body:not(.is-home) main { padding-top: 0; }
 
 /* 2026-11: warm paper / vermilion, shared by menu, journal and home. */
 :root{--primary:#b34c2c;--primary-hover:#913b22;--primary-soft:#f6e9dc;--header-h:76px}
-html{scroll-padding-top:85px}
+html{scroll-padding-top:0}
 body{background:#f3efe5;color:#2e2923}
 a:focus-visible,button:focus-visible{outline:2px solid #b34c2c;outline-offset:5px}
 .site-header{background:#f3efe5}.header-inner{height:76px;padding:10px 4%;gap:20px}.site-logo-img{height:52px}.global-nav a{font-size:12px}.header-reserve{font-size:12px;border-radius:0;padding:12px 20px}.header-right{gap:15px}.site-header.has-scrolled{box-shadow:0 1px 8px #34281c16}
 .is-home .site-header{position:fixed;top:0}.is-home .section{opacity:1;transform:none;will-change:auto}
 .section-title,.page-title,.menu-cat-ja{font-family:'Shippori Mincho','Yu Mincho',serif}.section-title{font-weight:600;letter-spacing:.12em}.section-title:after{height:1px;margin-top:20px}
 .reserve{background:#e8dfce;padding-block:80px}.reserve-block{background:transparent;border-radius:0;box-shadow:none}.reserve-tel-number{font-family:'Shippori Mincho',serif}.btn-primary,.btn-secondary{border-radius:0}.access{background:#302b24;color:#f3efe5;padding-block:85px}.access .section-title:after{background:#ce9d76}.access .shop-name{color:#f3efe5}.access .shop-data dt,.access .shop-data dd{border-color:#ffffff25;color:inherit}.access .shop-data dt{opacity:.65}.access-map iframe{border-radius:0}.access .home-text-link{display:block;max-width:none;border-bottom:1px solid #ffffff50;padding:18px 0;font-size:13px}.site-footer{background:#25211c;color:#f3efe5}.site-footer p,.site-footer .footer-copy{color:#e3d9ca}.footer-social{display:flex;gap:25px;font-size:12px;margin-bottom:20px}.mp-card,.blog-card{border-radius:0;box-shadow:none}.back-to-top-home{background:#f3efe5}
+/* Explicit surface colors: the original light-theme dl color must not leak in. */
+.access .section-title,.access .shop-name,.access .shop-data{color:#f3efe5}
+.access .shop-data{grid-template-columns:6em minmax(0,1fr);gap:0 22px;margin:0}
+.access .shop-data dt,.access .shop-data dd{padding:13px 0;border-bottom:1px solid #ffffff29;opacity:1}
+.access .shop-data dt{color:#d6c9b7;font-weight:500}
+.access .shop-data dd{color:#f3efe5;overflow-wrap:anywhere}
+.access .shop-data a{color:#f4c7a4;text-decoration:underline;text-underline-offset:4px}
+.access .shop-data a:hover{color:#fff}
+.access .access-map{display:flex;flex-direction:column;min-width:0;min-height:420px;overflow:visible;box-shadow:none}
+.access .access-map iframe{flex:1 1 auto;min-height:350px;height:100%;width:100%}
+.access .home-text-link{flex:none;color:#f3efe5;line-height:1.7;text-decoration:underline;text-underline-offset:5px;border-color:#ffffff66}
+.access a:focus-visible{outline-color:#f4c7a4}
+@media(max-width:900px){:root{--header-h:64px}.access .access-map{min-height:0}.access .access-map iframe{height:300px;min-height:300px;flex:none}.access .shop-data{grid-template-columns:5em minmax(0,1fr);gap:0 16px;font-size:14px}.access .section-title{font-size:26px}}
 @media(max-width:1100px) and (min-width:901px){.header-inner{gap:10px;padding-inline:20px}.global-nav a{padding-inline:9px;font-size:11px}.header-reserve{padding:12px}.site-logo-img{height:45px}}
 @media(max-width:900px){.header-inner{height:64px;padding:8px 5%;gap:10px}.site-logo-img{height:40px}.header-right{gap:12px}.header-reserve{font-size:10px;padding:9px 10px}.nav-toggle{border:0;width:32px}.drawer{background:#f3efe5}.reserve,.access{padding-block:60px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
