@@ -144,9 +144,7 @@
 
       let imgSrc = '';
       if (post.image) {
-        imgSrc = post.image
-          .replace(/^\.\//, '../../')
-          .replace(/^\.\.\//, '../../');
+        imgSrc = post.image.replace(/^(?:\.\/|\.\.\/)/, '../../');
       }
 
       const rawBody = post.body || `<p>${esc(post.excerpt)}</p>`;

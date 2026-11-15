@@ -68,7 +68,7 @@
       posts.forEach(p => {
         let imgSrc = '';
         if (p.image) {
-          imgSrc = p.image.replace(/^\.\//, '../').replace(/^\.\.\//, '../../');
+          imgSrc = p.image.replace(/^(?:\.\/|\.\.\/)/, '../');
         }
         const bg = imgSrc ? `background-image:url('${esc(BlogSecurity.imageURL(imgSrc))}');` : 'background:#f0f0f0;';
         const el = document.createElement('article');
