@@ -1,6 +1,6 @@
-/* Set this store's verified GA4 measurement ID here when available. */
+/* 食堂 うめぼし 天神南 — GA4 */
 (() => {
-  const measurementId = '';
+  const measurementId = 'G-JRWWVXMLTW';
   if (!/^G-[A-Z0-9]+$/.test(measurementId)) return;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
