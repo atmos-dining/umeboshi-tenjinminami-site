@@ -1,0 +1,8 @@
+--- a/wrangler.toml
++++ b/wrangler.toml
+@@ -4,4 +4,4 @@
+ 
+ # Exact HTTPS hosts permitted to receive CMS OAuth results.
+ [vars]
+-ALLOWED_DOMAINS = "atmos-dining.github.io,hakata-chatten.com,italian-umeboshi.com,karada-totonou-lab.com,nomuka-cafe.com,ropponmatsu-goen.com,sakanatooyasai-hiyori.com,sakedokoro-akari.com,shokudou-umeboshi.com,takamiya-sandy.com,tareyoshi-yoshizuka.com,www.nishinoumeboshi.com,yakiniku-bunta.com,yakiniku-daruma.com,yakitori-ichigo.com,yoshizuka-goen.com"
++ALLOWED_DOMAINS = "atmos-dining.github.io,hakata-chatten.com,italian-umeboshi.com,karada-totonou-lab.com,nomuka-cafe.com,ropponmatsu-goen.com,sakanatooyasai-hiyori.com,sakedokoro-akari.com,shokudou-umeboshi.com,takamiya-sandy.com,tareyoshi-yoshizuka.com,www.nishinoumeboshi.com,yakiniku-bunta.com,yakiniku-daruma.com,yakitori-ichigo.com,yoshizuka-goen.com,umeboshi-tenjinminami.com"

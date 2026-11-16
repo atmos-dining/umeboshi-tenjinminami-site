@@ -1,23 +1,21 @@
-# 独自ドメイン公開準備（2026-11-16）
+# 独自ドメイン公開（2026-11-16）
 
 正規URL: https://umeboshi-tenjinminami.com/
-ホスティング: GitHub Pages、main/root。DNS: Xserver。
+GitHub Pages: atmos-dining/umeboshi-tenjinminami-site、main/root。
 
-## 切替前の準備済み
-- CNAME、canonical、OGP、Restaurant URL、robots、sitemap を新ホストに統一。
-- 内部ナビゲーションをルート絶対パスに変更。記事の slug 別 canonical を維持。
-- 404ページ、各ページのSNSメタ情報を追加。管理画面は noindex 維持。
-- ブログの駅名・営業時間の誤記を本文と整合。
+## 完了
+- Xserver: apex A を185.199.108.153 / 109.153 / 110.153 / 111.153に設定。www CNAMEはatmos-dining.github.io。NSは維持、元々メール用レコードなし。
+- GitHub Pages: custom domain登録、証明書承認、HTTPS強制有効。
+- トップ・料理・ドリンク・ブログ一覧・記事・サイトマップのHTTPS 200を確認。
+- www / HTTP / 旧GitHub Pagesから正規HTTPS URLへのリダイレクトを確認。
+- canonical・OGP・Restaurant URL・robots・sitemap・内部リンクを更新。404ページ追加。
+- Google Search Console: https://umeboshi-tenjinminami.com/ のURLプレフィックスをHTMLメタタグで所有確認し、サイトマップ送信成功。メタタグは削除しない。
+- DNS TXTも登録済み。ドメインプロパティはGoogle側のTXT反映待ちで未確認。URLプレフィックスで検索管理は開始済み。
+- GA4: アトモスダイニング株式会社アカウント378307648、プロパティ564400821、ストリーム16348520175、測定ID G-JRWWVXMLTW。日本時間・日本円。phone_click / reservation_clickをキーイベントとして登録（仮の金額なし）。タグの本番反映済み、受信集計はGoogle側の処理待ち。
+- CMS: Cloudflare Dashboardで既存ALLOWED_DOMAINSの末尾にumeboshi-tenjinminami.comだけを追加しDeploy。既存ホスト・秘密鍵を保持。新ホストの/auth開始が302を返すことを確認。
 
-## 公開時に必ず完了する項目（未実施）
-1. Xserverログイン後に既存DNSを確認。メール用レコードは保持。
-2. GitHub Pages custom domain 設定とDNSの切替を連続して実施する。
-3. apex A: 185.199.108.153 / 185.199.109.153 / 185.199.110.153 / 185.199.111.153
-4. www CNAME: atmos-dining.github.io
-5. 移行ブランチをmainに反映し、pull --rebase後push。HTTPS証明書と強制HTTPSを確認。
-6. CMS認証Worker ALLOWED_DOMAINSへ umeboshi-tenjinminami.com を追加してデプロイ。実体は /Volumes/JIS/AI_AREA/Site/sveltia-cms-auth/ （サイトの2階層上）。
-7. Search ConsoleドメインプロパティのTXT検証と https://umeboshi-tenjinminami.com/sitemap.xml 送信。
-8. GA4の当店用測定IDを取得してanalytics.jsに設定、電話・予約イベントを確認。現在IDは空欄で未計測。
-9. apex/www/http/旧Pagesの遷移、全ページ、画像、ブログ、CMSログインを本番確認。
+## 次回のCMS Worker CLIデプロイ前の必須注意
+本番の許可リストは更新済みだが、別フォルダ /Volumes/JIS/AI_AREA/Site/sveltia-cms-auth/wrangler.toml はこの作業の書き込み範囲外。古い設定で再デプロイすると天神南のログインが拒否されるため、同梱cms-domain-sync.patchをその作業フォルダで適用してからデプロイすること。
 
-Xserverは現時点で未ログイン。DNS解決も未成立のため、既存サイトを壊さないよう切替変更はmainへ未反映。
+## 検証
+ローカル43リンク/アセット・インラインJS構文・JSON-LD・サイトマップXMLを確認。本番HERO表示もChromeで確認。検索順位やインデックス登録完了、GA4データ受信完了は保証・確認していない。
