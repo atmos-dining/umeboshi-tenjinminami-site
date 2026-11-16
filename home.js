@@ -235,7 +235,7 @@
     [...data.posts].sort((a,b) => String(b.date).localeCompare(String(a.date))).slice(0,3).forEach(post => {
       const a = document.createElement('a');
       a.className = 'home-news-row';
-      a.href = './blog/posts/post.html?slug=' + encodeURIComponent(post.slug);
+      a.href = '/blog/posts/post.html?slug=' + encodeURIComponent(post.slug);
       const time = document.createElement('time');
       time.dateTime = post.date;
       time.textContent = String(post.date || '').replaceAll('-','.');

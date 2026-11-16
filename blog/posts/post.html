@@ -3,8 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>ブログ｜食堂 うめぼし 天神南</title>
-<link rel="canonical" id="canonical-link" href="https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/">
-<meta property="og:url" id="og-url" content="https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/">
+<link rel="canonical" id="canonical-link" href="https://umeboshi-tenjinminami.com/blog/">
+<meta property="og:url" id="og-url" content="https://umeboshi-tenjinminami.com/blog/">
+<meta name="description" content="食堂 うめぼし 天神南からのお知らせ・ブログ。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ブログ｜食堂 うめぼし 天神南">
+<meta property="og:description" content="食堂 うめぼし 天神南からのお知らせ・ブログ。">
+<meta property="og:site_name" content="食堂 うめぼし 天神南">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://umeboshi-tenjinminami.com/images/noren-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="../../images/tenjinminami_icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,7 +112,7 @@
 
 </main>
 
-<script src="../../common.js?v=20261115"></script>
+<script src="../../common.js?v=20261116"></script>
 <script>
 (function () {
   function esc(s) {
@@ -121,7 +129,7 @@
   const slug = new URLSearchParams(location.search).get('slug') || legacySlug;
   if (slug) {
     const query = '?slug=' + encodeURIComponent(slug);
-    const canonical = 'https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/posts/post.html' + query;
+    const canonical = 'https://umeboshi-tenjinminami.com/blog/posts/post.html' + query;
     document.getElementById('canonical-link').href = canonical;
     document.getElementById('og-url').content = canonical;
     if (location.hash) history.replaceState(null, '', location.pathname + query);
@@ -141,11 +149,17 @@
       if (!post) throw new Error('not found');
 
       document.title = `${post.title}｜食堂 うめぼし 天神南`;
+      document.querySelector('meta[name="description"]').content = post.excerpt || post.title;
+      document.querySelector('meta[property="og:title"]').content = document.title;
+      document.querySelector('meta[property="og:description"]').content = post.excerpt || post.title;
 
       let imgSrc = '';
       if (post.image) {
         imgSrc = post.image.replace(/^(?:\.\/|\.\.\/)/, '../../');
       }
+
+      const safeImage = BlogSecurity.imageURL(imgSrc);
+      if (safeImage) document.querySelector('meta[property="og:image"]').content = new URL(safeImage, location.href).href;
 
       const rawBody = post.body || `<p>${esc(post.excerpt)}</p>`;
       const bodyHtml = (typeof marked !== 'undefined' && !rawBody.trimStart().startsWith('<'))
@@ -164,7 +178,7 @@
           ${imgSrc ? `<img src="${esc(BlogSecurity.imageURL(imgSrc))}" alt="${esc(post.title)}" class="post-hero">` : ''}
           <div class="post-body">${BlogSecurity.sanitizeHTML(bodyHtml)}</div>
           <div class="post-back">
-            <a href="../" class="btn-secondary">← ブログ一覧に戻る</a>
+            <a href="/blog/" class="btn-secondary">← ブログ一覧に戻る</a>
           </div>
         </div>`;
     })

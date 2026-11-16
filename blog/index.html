@@ -10,9 +10,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css?v=20261115b">
-<link rel="canonical" href="https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/">
+<link rel="canonical" href="https://umeboshi-tenjinminami.com/blog/">
 <script src="../analytics.js?v=20261115" defer></script>
 <script src="../vendor/blog-security.js"></script>
+<meta property="og:type" content="website">
+<meta property="og:title" content="ブログ・お知らせ｜食堂 うめぼし 天神南">
+<meta property="og:description" content="食堂 うめぼし 天神南の最新情報・ブログ記事。おすすめメニューやお知らせをお届けします。">
+<meta property="og:site_name" content="食堂 うめぼし 天神南">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://umeboshi-tenjinminami.com/blog/">
+<meta property="og:image" content="https://umeboshi-tenjinminami.com/images/noren-hero.jpg">
+<meta property="og:image:alt" content="食堂 うめぼし 天神南">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body data-page="blog">
@@ -39,7 +48,7 @@
 
 </main>
 
-<script src="../common.js?v=20261115"></script>
+<script src="../common.js?v=20261116"></script>
 <script>
 (function () {
   const list = document.getElementById('blogList');
@@ -74,7 +83,7 @@
         const el = document.createElement('article');
         el.className = 'blog-card';
         el.innerHTML = `
-          <a href="./posts/post.html?slug=${encodeURIComponent(p.slug)}">
+          <a href="/blog/posts/post.html?slug=${encodeURIComponent(p.slug)}">
             <div class="blog-image" style="${bg}"></div>
             <div class="blog-body">
               <time class="blog-date" datetime="${esc(p.date)}">${fmtDate(p.date)}</time>

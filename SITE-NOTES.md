@@ -5,7 +5,7 @@
 - home.css / home.js はトップ専用。動きを減らす設定とLINE内ブラウザでは静止表示。スクロールを横取りしない。
 - images/noren-hero.jpg は今回生成した料理イメージ（1536×1024、約292KB）。Google Mapsで確認した茶色の器・白い受け皿・白ねぎをのせた肉豆腐の盛り付けを参考にした新規画像。
 - 店内などは既存のサイト画像を継続使用。
-- GitHub Pagesの /umeboshi-tenjinminami-site/ 配信を維持。partialsのパスはcommon.jsの設置場所から解決。
+- 独自ドメインは https://umeboshi-tenjinminami.com/ 。GitHub Pages main/root 配信。内部リンクはルート絶対パス、canonical・OGP・サイトマップも同じホストに統一。
 - ブログは posts.json / files collectionを維持。本文サニタイズ、画像URL検証を維持。記事リンクとcanonicalを?slug=へ統一。旧ハッシュ記事リンクも互換対応。
 - 既存ブログ記事本文・メニュー価格は今回変更していない。
 

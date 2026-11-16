@@ -10,8 +10,7 @@
   const ownScript = [...document.scripts].find(s => /(?:^|\/)common\.js(?:\?|$)/.test(s.src));
   const ROOT = new URL('.', ownScript ? ownScript.src : location.href).pathname;
   function resolvePartial(html) {
-    return html.replaceAll('/umeboshi-tenjinminami-site/', ROOT)
-      .replace(/src="\.\//g, `src="${ROOT}`);
+    return html.replace(/src="\.\//g, `src="${ROOT}`);
   }
 
   function loadHeader() {

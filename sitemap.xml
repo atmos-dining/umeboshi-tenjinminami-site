@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://atmos-dining.github.io/umeboshi-tenjinminami-site/</loc>
+    <loc>https://umeboshi-tenjinminami.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://atmos-dining.github.io/umeboshi-tenjinminami-site/menu.html</loc>
+    <loc>https://umeboshi-tenjinminami.com/menu.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://atmos-dining.github.io/umeboshi-tenjinminami-site/drink.html</loc>
+    <loc>https://umeboshi-tenjinminami.com/drink.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/</loc>
+    <loc>https://umeboshi-tenjinminami.com/blog/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url><loc>https://atmos-dining.github.io/umeboshi-tenjinminami-site/blog/posts/post.html?slug=open-greeting</loc></url>
+  <url><loc>https://umeboshi-tenjinminami.com/blog/posts/post.html?slug=open-greeting</loc></url>
 </urlset>
