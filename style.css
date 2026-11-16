@@ -1401,3 +1401,7 @@ a:focus-visible,button:focus-visible{outline:2px solid #b34c2c;outline-offset:5p
 @media(max-width:1100px) and (min-width:901px){.header-inner{gap:10px;padding-inline:20px}.global-nav a{padding-inline:9px;font-size:11px}.header-reserve{padding:12px}.site-logo-img{height:45px}}
 @media(max-width:900px){.header-inner{height:64px;padding:8px 5%;gap:10px}.site-logo-img{height:40px}.header-right{gap:12px}.header-reserve{font-size:10px;padding:9px 10px}.nav-toggle{border:0;width:32px}.drawer{background:#f3efe5}.reserve,.access{padding-block:60px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* Keep the entrance usable in embedded WebKit and reduced-motion mode. */
+html{scroll-behavior:auto}
+@media(prefers-reduced-motion:reduce){.noren-scene.motion-enabled{height:180vh;min-height:1224px}.noren-panel,.noren-photo{transition:none!important}}
